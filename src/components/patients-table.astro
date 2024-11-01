@@ -1,0 +1,79 @@
+---
+const result = await fetch("http://localhost:4321/api/data.json");
+const data = await result.json();
+---
+
+<div class="w-[1500px] relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th scope="col" class="px-6 py-3">
+        Nombre
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Apellido
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Cédula
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Edad
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Fecha Nacimiento
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Dirección
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Alergia Medicamento
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Diagnóstico
+      </th>
+      <th scope="col" class="px-6 py-3">
+        Tratamiento
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    {data.map((patient) => {
+      const fechaNacimiento = new Date(patient.fecha_nacimiento);
+      const fechaFormateada = `${fechaNacimiento.getFullYear()}-${(fechaNacimiento.getMonth() + 1).toString().padStart(2, '0')}-${fechaNacimiento.getDate().toString().padStart(2, '0')}`;
+
+      return (
+        <tr
+          class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+          <td class="px-6 py-4">
+            {patient.nombre}
+          </td>
+          <td class="px-6 py-4">
+            {patient.apellido}
+          </td>
+          <td class="px-6 py-4">
+            {patient.cedula}
+          </td>
+          <td class="px-6 py-4">
+            {patient.edad}
+          </td>
+          <td class="px-6 py-4">
+            {fechaFormateada}
+          </td>
+          <td class="px-6 py-4">
+            {patient.direccion}
+          </td>
+          <td class="px-6 py-4">
+            {patient.alergia_medicamento}
+          </td>
+          <td class="px-6 py-4">
+            {patient.diagnostico}
+          </td>
+          <td class="px-6 py-4">
+            {patient.tratamiento}
+          </td>
+        </tr>
+      );
+    })}
+    </tbody>
+  </table>
+</div>

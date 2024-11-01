@@ -1,0 +1,74 @@
+---
+const { cedula } = Astro.params;
+import Layout from "../../layouts/Layout.astro";
+import NavigationList from "../../components/navigation-list.astro";
+
+const result = await fetch(`http://localhost:4321/api/pacient-search.json?cedula=${cedula}`);
+
+const { data } = await result.json();
+const isOk = result.ok
+
+let fechaFormateada
+if (isOk) {
+  const fechaNacimiento = new Date(data.fecha_nacimiento);
+  fechaFormateada = `${fechaNacimiento.getFullYear()}-${(fechaNacimiento.getMonth() + 1).toString().padStart(2, '0')}-${fechaNacimiento.getDate().toString().padStart(2, '0')}`;
+
+}
+---
+
+<Layout title="Paciente">
+  <main class="flex flex-col justify-center items-center">
+    <h1 class="text-center text-4xl font-bold mt-20">Paciente: {cedula}</h1>
+    <NavigationList tailwind="" />
+
+    {
+      isOk
+        ? (
+          <div class="text-white">
+            <h2 class="text-3xl font-bold mt-10">Datos del Paciente</h2>
+            <p class="font-medium">
+              <span class="font-semibold">Nombre:</span> {data.nombre}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Apellido:</span> {data.apellido}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Cédula:</span> {data.cedula}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Edad:</span> {data.edad}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Fecha Nacimiento:</span> {fechaFormateada}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Dirección:</span> {data.direccion}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Alergia Medicamento:</span> {data.alergia_medicamento}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Diagnóstico:</span> {data.diagnostico}
+            </p>
+            <p class="font-medium">
+              <span class="font-semibold">Tratamiento:</span> {data.tratamiento}
+            </p>
+          </div>
+        )
+        : (
+          <div class="text-center text-red-500 mt-10">
+            <p class="text-4xl font-bold">Paciente no encontrado</p>
+          </div>
+        )
+    }
+
+    <a
+      href={`/patient/edit/${cedula}`}
+      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+    >
+      <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+        Editar Paciente
+      </span>
+    </a>
+  </main>
+</Layout>

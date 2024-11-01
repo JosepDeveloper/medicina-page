@@ -1,0 +1,11 @@
+---
+import AnchorButton from "./anchor-button.astro";
+
+const { tailwind } = Astro.props;
+---
+
+<div class={`flex gap-4 justify-center items-center ${tailwind}`}>
+  <AnchorButton title="Inicio" href="/"/>
+  <AnchorButton title="Agregar Nuevo Paciente" href="/create-patient"/>
+  <AnchorButton title="Ver Listado dePacientes" href="/view-patients"/>
+</div>
